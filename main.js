@@ -27,7 +27,9 @@ const renderer = new THREE.WebGLRenderer({
 // setting render size and the camera position
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight)
-camera.position.setZ(50);
+camera.position.setZ(-20);
+camera.position.setX(-20);
+camera.position.setY(30);
 renderer.render(scene, camera)
 
 // Adding geometry
@@ -59,23 +61,29 @@ const gridHelper = new THREE.GridHelper(200, 50)
 // Governs controls
 const controls = new OrbitControls(camera, renderer.domElement)
 
+// Scrolling
+function moveCamera() { 
 
-renderer.domElement.addEventListener('keydown', keydown);
-renderer.domElement.addEventListener('keyup', keyup);
-function keydown(e) {
-  keys[e.key] = true;
+  let t = document.body.getBoundingClientRect().top;
+
+  camera.position.z = t * -0.1;
+  // camera.position.y = t * -0.02;
+  // camera.position.x = t * -0.1;
+
+  camera.lookAt(0,0,0)
 }
-function keyup(e) {
-  keys[e.key] = false;
-}
 
+// Skybox
+const sky = new THREE.TextureLoader().load("44211.jpeg")
+scene.background = sky
 
+// Adds stars
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.25, 24, 24);
   const material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF })
   const star = new THREE.Mesh(geometry, material);
   
-  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(300));
   star.position.set(x, y, z);
   scene.add(star)
 }
@@ -97,28 +105,12 @@ function animate() {
   torus3.rotation.x += 0.005;
   torus3.rotation.y += 0.01;
   torus3.rotation.z += 0.005;
-
-  if (controlOn == true) {
-    controls.update()
-  }
-  if (keys['w']) {
-    controls.moveForward(.1);
-  }
-  if (keys['s']) {
-    controls.moveForward(-.1);
-  }
-  if (keys['a']) {
-    controls.moveRight(-.1);
-  }
-  if (keys['d']) {
-    controls.moveRight(.1);
-  }
-  if (keys['e']) {
-    controls.lock();
-  }
-
+  
+  
   renderer.render(scene, camera)
 }
 
 // call it
+moveCamera()
+document.body.onscroll = moveCamera
 animate()

@@ -3,3 +3,32 @@ canvas {
   top: 0;
   left: 0;
 }
+
+main {
+  display: flex;
+  position: absolute;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+h1 {
+  font-size: 50px;
+  color: white;
+  background-color: #00000066;
+}
+
+h6 {
+  font-size: 15px;
+  max-width: 40vw;
+  color: white;
+  background-color: #00000066;
+
+}
+
+body {
+  margin-bottom: 999999%;
+
+}
